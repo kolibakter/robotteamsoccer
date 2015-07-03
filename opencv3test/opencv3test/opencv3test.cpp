@@ -134,22 +134,22 @@ int _tmain(int argc, _TCHAR* argv[])
 
 		start = std::chrono::system_clock::now();
 
-		//cvtColor(frame, developed, CV_BGR2HSV);
-		//cvtColor(developed, developed, CV_HSV2RGB);
+		cvtColor(frame, developed, CV_BGR2HSV);
+		cvtColor(developed, developed, CV_HSV2RGB);
 
 		cvtColor(developed, graydev, CV_BGR2GRAY);
 
-		//erode(graydev, graydev, uelement);
-		//dilate(graydev, graydev, uelement);	qew2q	
+		erode(graydev, graydev, uelement);
+		dilate(graydev, graydev, uelement);	
 
 		GaussianBlur(graydev, graydev, Size(11, 11), 9, 9);
 
-		CannyThreshold();
+		//CannyThreshold();
 
-		dst.copyTo(developed);
+		//dst.copyTo(developed);
 
 		dilate(developed, developed, uelement);
-		//dilate(developed, developed, uelement);
+		dilate(developed, developed, uelement);
 
 		//thresh3UMat(developed, cv::Scalar(0, 0, 0), cv::Scalar(255, 255, 0));
 		//thresh3UMat(developed, cv::Scalar(0, 0, 0), cv::Scalar(0, 255, 255));

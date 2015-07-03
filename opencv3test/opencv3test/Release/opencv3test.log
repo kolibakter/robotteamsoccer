@@ -1,4 +1,4 @@
-﻿Build started 3.07.2015 11:10:36.
+﻿Build started 3.07.2015 13:12:55.
      1>Project "D:\Dropbox\UT\Robo2015\repo\opencv3test\opencv3test\opencv3test.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\opencv-3.0.0\build\include" /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Release\opencv3test.pch" /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt opencv3test.cpp
@@ -18,4 +18,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.47
+Time Elapsed 00:00:01.37
