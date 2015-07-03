@@ -14,7 +14,26 @@
 using namespace std;
 using namespace cv;
 
-//This is very slow and should not be used, apparently opencv3 is not designed for color segmentation
+int resX = 2560;
+int resY = 1024;
+int nChans = 3;
+int dispX = 960;
+int dispY = 384;
+cv::Size dispSize = cv::Size(dispX, dispY);
+cv::Size imSize = cv::Size(resX, resY);
+
+cv::Scalar red = cv::Scalar(0, 0, 255);
+
+cv::UMat graydev;
+cv::UMat src, dst;
+int lowThreshold;
+int const max_lowThreshold = 100;
+int cratio = 7;
+int kernel_size = 5;
+
+cv::UMat developed, frame;
+
+//This next functionis very slow and should not be used, apparently opencv3 is not well designed for color segmentation
 int thresh3UMat(UMat image, Scalar lowerBounds, Scalar upperBounds)
 {
 	Mat mimage;
@@ -44,6 +63,20 @@ int thresh3UMat(UMat image, Scalar lowerBounds, Scalar upperBounds)
 	return 0;
 }
 
+void CannyThreshold(void)
+{
+	/// Reduce noise with a kernel 3x3
+	blur(graydev, graydev, Size(3, 3));
+
+	/// Canny detector
+	Canny(graydev, graydev, lowThreshold, lowThreshold*cratio, kernel_size, true);
+
+	/// Using Canny's output as a mask, we display our result
+	dst = Scalar::all(0);
+
+	frame.copyTo(dst, graydev);
+	//graydev.copyTo(dst);
+}
 
 int _tmain(int argc, _TCHAR* argv[])
 {	
@@ -59,7 +92,6 @@ int _tmain(int argc, _TCHAR* argv[])
 	UMat uelement;
 	element.copyTo(uelement);
 
-	UMat developed, frame;
 	UMat lowB, upB;
 	lowB = UMat(1, 1, CV_8UC3, Scalar(50));
 	upB = UMat(1, 1, CV_8UC3, Scalar(200));
@@ -67,11 +99,19 @@ int _tmain(int argc, _TCHAR* argv[])
 	char devstr[50];
 	int frames = 0;
 	bool isFrame;
+	
+	dst.create(imSize, 16);
+
+	namedWindow("frame", CV_WINDOW_AUTOSIZE);
+	namedWindow("developed", CV_WINDOW_AUTOSIZE);
+	/// Create a Trackbar for user to enter threshold
+	createTrackbar("Min Threshold:", "developed", &lowThreshold, max_lowThreshold);
+
 	float capms = 0, procms = 0;
-	namedWindow("frame", 1);
-	namedWindow("developed", 1);
 	std::chrono::time_point<std::chrono::system_clock> start, end, capstart, capend;
 	std::chrono::duration<double> cap_elapsed, elapsed_seconds;
+
+
 	for (;;)
 	{
 		frames++;
@@ -82,7 +122,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		if (!isFrame) break;
 
 		//Upscale resolution to better emulate computational complexity with 2 ximea cameras.
-		resize(frame, frame, cv::Size(2560, 1024));
+		resize(frame, frame, imSize);
 		developed = frame.clone();
 
 		capend = std::chrono::system_clock::now();
@@ -90,14 +130,26 @@ int _tmain(int argc, _TCHAR* argv[])
 		capms += (cap_elapsed.count() * 1000.0);
 		//std::cout << "Capturing took " << cap_elapsed.count() * 1000.0 << "ms to run.\n";
 
+		std::cout << frame.type() << ", "<< frame.size() << endl;
+
 		start = std::chrono::system_clock::now();
 
-		cvtColor(frame, developed, CV_BGR2HSV);
-		cvtColor(developed, developed, CV_HSV2RGB);
+		//cvtColor(frame, developed, CV_BGR2HSV);
+		//cvtColor(developed, developed, CV_HSV2RGB);
 
-		//cvtColor(developed, developed, CV_BGR2GRAY);
+		cvtColor(developed, graydev, CV_BGR2GRAY);
 
-		GaussianBlur(developed, developed, Size(11, 11), 9, 9);
+		//erode(graydev, graydev, uelement);
+		//dilate(graydev, graydev, uelement);	qew2q	
+
+		GaussianBlur(graydev, graydev, Size(11, 11), 9, 9);
+
+		CannyThreshold();
+
+		dst.copyTo(developed);
+
+		dilate(developed, developed, uelement);
+		//dilate(developed, developed, uelement);
 
 		//thresh3UMat(developed, cv::Scalar(0, 0, 0), cv::Scalar(255, 255, 0));
 		//thresh3UMat(developed, cv::Scalar(0, 0, 0), cv::Scalar(0, 255, 255));
@@ -106,8 +158,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		//threshold(developed, developed, 200, 255, THRESH_TOZERO_INV);
 		//inRange(developed, lowB, upB, developed);
 
-		erode(developed, developed, uelement);
-		dilate(developed, developed, uelement);
+		
 
 		end = std::chrono::system_clock::now();
 		elapsed_seconds = end - start;
@@ -118,22 +169,22 @@ int _tmain(int argc, _TCHAR* argv[])
 		//Assembling display windows
 		//Raw capture window
 		sprintf_s(capstr, "CAPDUR: %.2f ms", cap_elapsed.count() * 1000.0);
-		putText(frame, capstr, Point2f(5, 30), FONT_HERSHEY_DUPLEX, 1, Scalar(255, 255, 255), 2);
+		putText(frame, capstr, Point2f(5, 30), FONT_HERSHEY_DUPLEX, 1, red, 2);
 		sprintf_s(capstr, "AVG: %.2f ms", capms / frames);
-		putText(frame, capstr, Point2f(360, 30), FONT_HERSHEY_DUPLEX, 1, Scalar(255, 255, 255), 2);
+		putText(frame, capstr, Point2f(360, 30), FONT_HERSHEY_DUPLEX, 1, red, 2);
 
 		//Processed window
 		sprintf_s(devstr, "PROCDUR: %.2f ms", elapsed_seconds.count() * 1000);
-		putText(developed, devstr, Point2f(5, 30), FONT_HERSHEY_DUPLEX, 1, Scalar(0, 0, 255), 2);
+		putText(developed, devstr, Point2f(5, 30), FONT_HERSHEY_DUPLEX, 1, red, 2);
 		sprintf_s(devstr, "RATE: %.2f fps", 1/elapsed_seconds.count());
-		putText(developed, devstr, Point2f(5, 60), FONT_HERSHEY_DUPLEX, 1, Scalar(0, 0, 255), 2);
+		putText(developed, devstr, Point2f(5, 60), FONT_HERSHEY_DUPLEX, 1, red, 2);
 		sprintf_s(devstr, "AVG: %.2f ms", procms / frames);
-		putText(developed, devstr, Point2f(360, 30), FONT_HERSHEY_DUPLEX, 1, Scalar(0, 0, 255), 2);
+		putText(developed, devstr, Point2f(360, 30), FONT_HERSHEY_DUPLEX, 1, red, 2);
 		sprintf_s(devstr, "AVG: %.2f fps", frames / (procms / 1000));
-		putText(developed, devstr, Point2f(360, 60), FONT_HERSHEY_DUPLEX, 1, Scalar(0, 0, 255), 2);
+		putText(developed, devstr, Point2f(360, 60), FONT_HERSHEY_DUPLEX, 1, red, 2);
 		//Canny(edges, edges, 0, 30, 3);
-		resize(frame, frame, cv::Size(960, 384));
-		resize(developed, developed, cv::Size(960, 384));
+		resize(frame, frame, dispSize);
+		resize(developed, developed, dispSize);
 		imshow("frame", frame);
 		imshow("developed", developed);
 		if (waitKey(30) >= 0) break;

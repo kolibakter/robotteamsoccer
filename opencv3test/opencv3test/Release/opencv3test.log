@@ -1,19 +1,21 @@
-﻿Build started 2.07.2015 19:42:03.
-     1>Project "C:\Users\KOL\Dropbox\UT\Robo2015\repo\opencv3test\opencv3test\opencv3test.vcxproj" on node 2 (Build target(s)).
+﻿Build started 3.07.2015 11:10:36.
+     1>Project "D:\Dropbox\UT\Robo2015\repo\opencv3test\opencv3test\opencv3test.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\opencv-3.0.0\build\include" /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Release\opencv3test.pch" /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt opencv3test.cpp
          opencv3test.cpp
-     1>opencv3test.cpp(90): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
-     1>opencv3test.cpp(114): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>C:\opencv-3.0.0\build\include\opencv2/imgproc.hpp(638): warning C4819: The file contains a character that cannot be represented in the current code page (1257). Save the file in Unicode format to prevent data loss
+     1>C:\opencv-3.0.0\build\include\opencv2/imgproc.hpp(3504): warning C4819: The file contains a character that cannot be represented in the current code page (1257). Save the file in Unicode format to prevent data loss
+     1>opencv3test.cpp(130): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>opencv3test.cpp(165): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\KOL\Dropbox\UT\Robo2015\repo\opencv3test\Release\opencv3test.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\opencv-3.0.0\build\x86\vc12\lib" opencv_world300.lib opencv_ts300.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\KOL\Dropbox\UT\Robo2015\repo\opencv3test\Release\opencv3test.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\KOL\Dropbox\UT\Robo2015\repo\opencv3test\Release\opencv3test.lib" /MACHINE:X86 /SAFESEH Release\opencv3test.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Dropbox\UT\Robo2015\repo\opencv3test\Release\opencv3test.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\opencv-3.0.0\build\x86\vc12\lib" opencv_world300.lib opencv_ts300.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\Dropbox\UT\Robo2015\repo\opencv3test\Release\opencv3test.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Dropbox\UT\Robo2015\repo\opencv3test\Release\opencv3test.lib" /MACHINE:X86 /SAFESEH Release\opencv3test.obj
          Release\stdafx.obj
      1>LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/LTCG' specification
          Generating code
          Finished generating code
-         opencv3test.vcxproj -> C:\Users\KOL\Dropbox\UT\Robo2015\repo\opencv3test\Release\opencv3test.exe
-     1>Done Building Project "C:\Users\KOL\Dropbox\UT\Robo2015\repo\opencv3test\opencv3test\opencv3test.vcxproj" (Build target(s)).
+         opencv3test.vcxproj -> D:\Dropbox\UT\Robo2015\repo\opencv3test\Release\opencv3test.exe
+     1>Done Building Project "D:\Dropbox\UT\Robo2015\repo\opencv3test\opencv3test\opencv3test.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.41
+Time Elapsed 00:00:01.47
